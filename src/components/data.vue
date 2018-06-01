@@ -1,12 +1,18 @@
 <template>
 <div class="yunger">
 	<keep-alive>
-		<div class="keywordclass">
-		<ul>
+		<div class="keywordclass" ref="keywordclass">
+		<ul ref="keywordclasstotal">
 			<li class="class-item" :class="{active:ind===index}" v-for="(item,index) in classWord" @click="chooseKeyWord(item,index)">
 				{{item}}
 			</li>
+			<li>
+			<div class="keywordclass-menu">
+				<i class="el-icon-tickets"></i>
+			</div>
+			</li>
 		</ul>
+		
 	</div>
 	</keep-alive>	
 	<div class="yungercontent">
@@ -30,6 +36,7 @@
 </template>
 
 <script>
+import Bscroll from 'better-scroll'
 //import axios from 'axios'
 export default {
 	props:{
@@ -52,7 +59,7 @@ export default {
       }
     },
    mounted(){
-   	
+   	this._getwidth();
    	this.$http.get("http://api.yunger.com/news/search?accesstoken=80fbdfb42acf134fb128a67a16811192&class=我们&num=50&days=7").then((res) =>{
    			this.yungerdata=res.data.data
    			//console.log(res)
@@ -60,6 +67,7 @@ export default {
    		}).catch((err) =>{
    			console.log(err)
    		})
+
    },
    methods:{
    	chooseKeyWord(item,index){
@@ -72,6 +80,18 @@ export default {
    		//console.log('hello',item)
    		})
    		//console.log('hello',item
+   	},
+   	_getwidth(){
+   		this.$refs.keywordclass.style.width = document.body.clientWidth+'px'
+   		//width = this.$refs.keywordclasstotal.childNodes[0].style.width+'px'
+   		let length = this.$refs.keywordclasstotal.childNodes.length;
+   		//let width = this.$refs.keywordclasstotal.childNodes[1].style.width+'px'
+   		// for(let i=0;i<length;i++){
+   		// 		let width = this.$refs.keywordclasstotal.childNodes[i]
+   		// }
+   		
+   		console.log(this.$refs.keywordclass.style.width)
+   		console.log('li的宽度',this.$refs.keywordclasstotal.childNodes[1].style)
    	}
    }
 };
@@ -80,33 +100,50 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus">
 	.yunger
+		//width:100%
 		.keywordclass
 			margin:0
 			padding-right:10px
 			position:relative
-			height:500px
-			.class-item
-				display:inline-block
-				padding-right:10px
-				line-height:40px
-				text-align:center
-		
-		.keywordclass
+			height:20px
 			position:fixed
 			top:40px
 			left:0
 			height:40px
-			width:100%
+			width:300px
 			background:#fff
 			z-index:10
 			border-bottom:1px solid #ccc
+			overflow:hidden
+			//overflow-x:scroll
+			//overflow-y:scroll
 			.class-item
+				display:block
+				float:left
+				padding-right:10px
+				line-height:40px
+				text-align:center	
 				&.active
 					color:blue
 					background:#ccc
-					border-bottom:3px solid #f0f
+					border-bottom:1px solid #f0f
+			.keywordclass-menu
+				position:fixed
+				display:inline-block
+				top:40px
+				right:0
+				clear:both
+				height:40px
+				width:40px
+				background:#fff
+				text-align:center
+				.el-icon-tickets
+					height:40px
+					width:40px
+					font-size:30px
+					
 		.yungercontent
-			font-size:14px
+			font-size:12px
 			margin:40px 0
 			.yungerdata-item
 				margin:10px 0
@@ -115,7 +152,7 @@ export default {
 				.item-main
 					height:100%
 					.item-main-header
-						font-size:14 px
+						font-size:12px
 						font-weight:700px
 						.title
 							padding-bottom:10px
