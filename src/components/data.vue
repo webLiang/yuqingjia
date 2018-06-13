@@ -5,14 +5,12 @@
 		<ul ref="keywordclasstotal">
 			<li class="class-item" :class="{active:ind===index}" v-for="(item,index) in classWord" @click="chooseKeyWord(item,index)">
 				{{item}}
-			</li>
-			<li>
-			<div class="keywordclass-menu">
-				<i class="el-icon-tickets"></i>
-			</div>
-			</li>
+			</li>		
+			
 		</ul>
-		
+		<div class="keywordclass-menu">
+				<i class="el-icon-tickets"></i>
+		</div>
 	</div>
 	</keep-alive>	
 	<div class="yungercontent">
@@ -42,10 +40,9 @@ export default {
 	props:{
 		
 		classWord:{
-			//type:Object,
+			type:Array,
 			default:[
-				'我们',
-				'竟对'
+				
 			]		
 		}
 	},
@@ -59,7 +56,8 @@ export default {
       }
     },
    mounted(){
-   	this._getwidth();
+   
+   	
    	this.$http.get("http://api.yunger.com/news/search?accesstoken=80fbdfb42acf134fb128a67a16811192&class=我们&num=50&days=7").then((res) =>{
    			this.yungerdata=res.data.data
    			//console.log(res)
@@ -67,7 +65,7 @@ export default {
    		}).catch((err) =>{
    			console.log(err)
    		})
-
+   	setTimeout(this._getwidth(),1000)	
    },
    methods:{
    	chooseKeyWord(item,index){
@@ -82,16 +80,28 @@ export default {
    		//console.log('hello',item
    	},
    	_getwidth(){
+
    		this.$refs.keywordclass.style.width = document.body.clientWidth+'px'
-   		//width = this.$refs.keywordclasstotal.childNodes[0].style.width+'px'
-   		let length = this.$refs.keywordclasstotal.childNodes.length;
-   		//let width = this.$refs.keywordclasstotal.childNodes[1].style.width+'px'
-   		// for(let i=0;i<length;i++){
-   		// 		let width = this.$refs.keywordclasstotal.childNodes[i]
-   		// }
    		
-   		console.log(this.$refs.keywordclass.style.width)
-   		console.log('li的宽度',this.$refs.keywordclasstotal.childNodes[1].style)
+   		let length = this.$refs.keywordclasstotal.children.length;
+   		let totalWidth = 0;
+   		for(let i=0;i<length;i++){
+   			let width = this.$refs.keywordclasstotal.children[i].offsetWidth;
+   			totalWidth += width;
+   			console.log(i)
+   		}
+   		this.$refs.keywordclasstotal.style.width = 2000+'px'
+   		//console.log(document.body.clientWidth)
+   		//console.log(totalWidth)
+   		//console.log(this.$refs.keywordclasstotal.children[2].offsetWidth)
+   		//console.log(totalWidth)
+
+   	},
+   	watch(){
+   		classWord:{
+   			this._getwidth(),
+   			console.log('hello')
+   		}
    	}
    }
 };
@@ -105,6 +115,7 @@ export default {
 			margin:0
 			padding-right:10px
 			position:relative
+			width:100%
 			height:20px
 			position:fixed
 			top:40px
@@ -122,7 +133,8 @@ export default {
 				float:left
 				padding-right:10px
 				line-height:40px
-				text-align:center	
+				text-align:center
+				overflow:hidden	
 				&.active
 					color:blue
 					background:#ccc
@@ -134,13 +146,14 @@ export default {
 				right:0
 				clear:both
 				height:40px
+				line-height:40px
 				width:40px
 				background:#fff
 				text-align:center
 				.el-icon-tickets
 					height:40px
 					width:40px
-					font-size:30px
+					font-size:20px
 					
 		.yungercontent
 			font-size:12px

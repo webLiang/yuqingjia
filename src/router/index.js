@@ -14,6 +14,7 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect:'/data',
       name: 'app',
       component: HelloWorld
     },

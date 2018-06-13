@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JSONP 实例</title>
+</head>
+<body>
+    <div id="divCustomers"></div>
+    <script type="text/javascript">
+        function callbackFunction(res)
+            {
+                console.log(res)
+            }
+    </script>
+<script src="http://api.yunger.com/user/getclass?accesstoken=80fbdfb42acf134fb128a67a16811192&callback=callbackFunction"></script>
+</body>
+</html>
