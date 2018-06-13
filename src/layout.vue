@@ -30,15 +30,15 @@ const API_PROXY = 'https://bird.ioliu.cn/v1/?url='
 export default {
 data(){
   return{
-    classWord:{}
+    classWord:['我们','竞对']
   }
   
 },
 mounted(){
-  this.$http.get(API_PROXY +"http://api.yunger.com/user/getclass?accesstoken=80fbdfb42acf134fb128a67a16811192").then((res) =>{
+  this.$http.get(this.HOST +"/user/getclass?accesstoken=80fbdfb42acf134fb128a67a16811192").then((res) =>{
     
-    this.classWord=res.data.data.info
-    //console.log(typeof this.classWord)
+     this.classWord=res.data.data.info
+    //console.log(res)
   })
   // this.$http.all([
 
