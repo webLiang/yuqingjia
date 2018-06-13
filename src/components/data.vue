@@ -14,6 +14,22 @@
 	</div>
 	</keep-alive>	
 	<div class="yungercontent">
+	<!-- <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded">
+		<ul v-show="yungerdata">
+	 		<li v-for="item in yungerdata.info"class="yungerdata-item">
+				<div class="item-main">
+					<div class="item-main-header">
+						<a  class="title" :href="item.url" v-html="item.title" :url="item.image"></a>
+						<span class="site">{{item.site}}</span>
+						<span class="time">{{item.time}}</span>
+					</div>
+					<div class="item-main-foot">
+						<span v-html="item.content" class="content"></span>
+					</div>	
+				</div>
+	 		</li>
+	 	</ul>
+	</mt-loadmore> -->
  	<ul v-show="yungerdata">
  		<li v-for="item in yungerdata.info"class="yungerdata-item">
 			<div class="item-main">
@@ -55,6 +71,7 @@ export default {
       	ind:''
       }
     },
+
    mounted(){
    
    	
@@ -65,7 +82,10 @@ export default {
    		}).catch((err) =>{
    			console.log(err)
    		})
-   	setTimeout(this._getwidth(),1000)	
+   	setTimeout(() =>{
+   		this._getwidth()
+   		//this._initScroll()
+   	},50)	
    },
    methods:{
    	chooseKeyWord(item,index){
@@ -87,28 +107,36 @@ export default {
    		let totalWidth = 0;
    		for(let i=0;i<length;i++){
    			let width = this.$refs.keywordclasstotal.children[i].offsetWidth;
-   			totalWidth += width;
-   			console.log(i)
+   			totalWidth += width+10;
+   			//console.log(totalWidth)
    		}
-   		this.$refs.keywordclasstotal.style.width = 2000+'px'
-   		//console.log(document.body.clientWidth)
-   		//console.log(totalWidth)
-   		//console.log(this.$refs.keywordclasstotal.children[2].offsetWidth)
-   		//console.log(totalWidth)
+   		this.$refs.keywordclasstotal.style.width = totalWidth+'px';
 
+      },
+      _initScroll(){
+   		this.classWorldScroll = new BScroll(this.$refs.keywordclass, {
+        scrollX: false,
+        scrollY: true,
+        momentum: false,
+        
+        click: true
+      })
+   	}
+	
    	},
-   	watch(){
-   		classWord:{
-   			this._getwidth(),
-   			console.log('hello')
+   	
+   	watch:{
+   		classWord(){
+   			this._getwidth()
+   			//console.log('hello')
    		}
    	}
-   }
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus">
+
 	.yunger
 		//width:100%
 		.keywordclass
@@ -126,8 +154,8 @@ export default {
 			z-index:10
 			border-bottom:1px solid #ccc
 			overflow:hidden
-			//overflow-x:scroll
-			//overflow-y:scroll
+			overflow-x:auto
+			//overflow-y:hidden
 			.class-item
 				display:block
 				float:left

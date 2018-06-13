@@ -6,7 +6,12 @@ import layout from './layout'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
-import axios from 'axios'  
+import axios from 'axios'
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+//import LyTab from 'ly-tab';
+Vue.use(MintUI)
+//Vue.use(LyTab);  
 Vue.prototype.$http=axios;
 Vue.prototype.HOST ='/api'
 //Vue.use(ElementUI);

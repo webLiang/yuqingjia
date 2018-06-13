@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "better-scroll": "^1.11.1",
+    "better-scroll": "0.1.7",
     "element-ui": "^2.3.9",
+    "ly-tab": "^1.0.3",
+    "mint-ui": "^1.0.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

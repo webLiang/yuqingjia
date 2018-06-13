@@ -1,0 +1,216 @@
+<!DOCTYPE html>      
+<html lang="en">      
+<head>      
+    <meta charset="UTF-8">      
+    <title>移动端手指操控左右滑动的菜单</title>    
+    <style type="text/css">    
+    body {margin:0;}  
+    .menu-wrap {  
+        width: 100%;  
+        height: 50px;  
+        overflow: hidden;  
+    }  
+    .menu-wrap-layer2 {  
+        width: 100%;  
+        height: 50px;  
+        overflow: hidden;  
+    }  
+    .menu-list {  
+        display: inline-block;  
+        white-space: nowrap;  
+        transition-duration: 0ms;  
+        transform: translateX(0px);  
+    }  
+    .menu-list-item {  
+        display: inline-block;  
+    }  
+    .menu-list-item span {  
+        display: inline-block;  
+        width: 100px;  
+        margin: 0 3px;  
+        text-align: center;  
+    }  
+    </style>     
+</head>      
+<body>    
+<div id="menu-wrap" class="menu-wrap">  
+    <div class="menu-list js-menu-list">  
+        <div class="menu-list-item">  
+            <span data-index="0">全站</span>          
+        </div>  
+        <div class="menu-list-item">  
+            <span data-index="1">动画</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span data-index="2">番剧</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span data-index="3">国创</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span data-index="4">音乐</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>舞蹈</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>科技</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>游戏</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>娱乐</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>电影</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>电视剧</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>纪录片</span>  
+        </div>          
+    </div>          
+</div>  
+<div>  
+<div class="menu-wrap-layer2 js-menu-wrap-layer2 js-menu-wrap0" style="display: block;">  
+    <div class="menu-list js-menu-list">  
+        <div class="menu-list-item">  
+            <span>二级菜单1</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单2</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单3</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单4</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单5</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单6</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单7</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单8</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单9</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单10</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单11</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单12</span>  
+        </div>          
+    </div>      
+</div>      
+  
+<div class="menu-wrap-layer2 js-menu-wrap-layer2 js-menu-wrap1" style="display: none;">  
+    <div class="menu-list js-menu-list">  
+        <div class="menu-list-item">  
+            <span>二级菜单s1</span>  
+        </div>  
+        <div class="menu-list-item">  
+            <span>二级菜单s2</span>  
+        </div>          
+    </div>      
+</div>  
+</div>  
+  
+  
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>  
+<script type="text/javascript">  
+  
+  
+$(function() {  
+    var menu = function(wrap, menuList, menuItems) {  
+        var deviceWidth = $(window).width();  
+        var positionX = 0;  
+        var menuListPositionX1 = wrap.offset().left;   
+        var menuListPositionX2 = menuListPositionX1 + wrap.width();        
+  
+        $(menuList).attr("style","transition-duration: 0ms;transform: translateX(0px);");  
+  
+        menuList.addEventListener('touchstart',function(event){  
+            if(event.targetTouches.length == 1){  
+                var touch = event.targetTouches[0];  
+                positionX = touch.pageX;  
+                //确定本次拖动transform的初始值  
+                var transformStr = menuList.style.transform;  
+                transformStr = transformStr.substring(11);  
+                var index = transformStr.lastIndexOf("p");  
+                transformStr = transformStr.substring(0, index);  
+                transformX = parseInt(transformStr);  
+                //确定本次拖动的div宽度值  
+                var widthStr = menuList.style.width;  
+                thisWidth = parseInt(widthStr.substring(0,widthStr.lastIndexOf("p")));  
+            }  
+        }, false);  
+        menuList.addEventListener('touchmove', function(event) {  
+            //阻止其他事件  
+            event.preventDefault();  
+            //获取当前坐标  
+            if(event.targetTouches.length == 1){  
+                var touch = event.targetTouches[0];  
+                menuList.style.transform = 'translateX('+(transformX+touch.pageX-positionX)+'px)';  
+                $(menuList).css("width",thisWidth+positionX-touch.pageX);  
+            }  
+        }, false);  
+        menuList.addEventListener('touchend', function(event) {  
+            var menuItem1 = menuItems[0];  
+            var menuItem1Left = $(menuItem1).offset().left;  
+            var menuItem2 = menuItems[menuItems.length-1];  
+            var menuItemPositionX = $(menuItem2).offset().left+$(menuItem2).width();  
+            var firstToLast = menuItemPositionX - menuItem1Left;  
+            if (menuItem1Left > menuListPositionX1 || firstToLast < deviceWidth) {  
+                menuList.style.transform = 'translateX('+(menuListPositionX1)+'px)';  
+            }  
+            if(menuItemPositionX < menuListPositionX2 && menuItem1Left < 0 && firstToLast > deviceWidth) {  
+                var myWidth = $(menuList).width() - deviceWidth;  
+                menuList.style.transform = 'translateX('+(0-myWidth)+'px)';  
+            }  
+        }, false);  
+    }  
+  
+    var event = function() {  
+        $('#menu-wrap .js-menu-list span').click(function () {  
+            console.log($(this).attr('data-index'));  
+            var activeMenu = $('.js-menu-wrap' + $(this).attr('data-index'));  
+            activeMenu.siblings().hide();  
+            activeMenu.show();  
+        });  
+    }  
+    var init = function() {  
+        var menuWrap = $('#menu-wrap');  
+        var menuList = $("#menu-wrap .js-menu-list")[0];  
+        var menuListItems = $("#menu-wrap .menu-list-item");  
+        menu(menuWrap, menuList, menuListItems);  
+  
+        var menuWrapLayer2 = $('.js-menu-wrap-layer2');  
+        var helper = function (tempWrap, tempMenuList, tempMenuListItems) {    
+            var tempFun = function() {  
+                menu(tempWrap, tempMenuList, tempMenuListItems);  
+            }();  
+        }    
+        for (var i = 0; i < menuWrapLayer2.length; i++) {  
+            var tempWrap = $(menuWrapLayer2[i]);  
+            var tempMenuList = $(menuWrapLayer2[i]).find('.js-menu-list')[0];  
+            var tempMenuListItems = $(menuWrapLayer2[i]).find('.menu-list-item');  
+            helper(tempWrap, tempMenuList, tempMenuListItems);  
+        }  
+        event();  
+    }();  
+});  
+</script>  
+</body>      
+</html> 
