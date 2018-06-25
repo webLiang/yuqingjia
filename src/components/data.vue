@@ -2,11 +2,10 @@
 <div class="yunger">
 	<keep-alive>
 		<div class="keywordclass" ref="keywordclass">
-		<ul ref="keywordclasstotal">
-			<li class="class-item" :class="{active:ind===index}" v-for="(item,index) in classWord" @click="chooseKeyWord(item,index)">
+		<ul @touchstart='slideclass' @touchmove="slideclassMove" @touchend="slideclassEnd" class="keywordclassul" ref="keywordclasstotal">
+			<li class="class-item" :class="{active:ind===index}" v-for="(item,index) in classWord" @click.stop="chooseKeyWord(item,index)">
 				{{item}}
-			</li>		
-			
+			</li>
 		</ul>
 		<div class="keywordclass-menu">
 				<i class="el-icon-tickets"></i>
@@ -62,8 +61,13 @@ export default {
 			]		
 		}
 	},
+	created(){
+			this.x={},
+			this.pre = 0;
+	},
 	data() {
       return {
+      	
       	yungerdata:{},
       	keyword:
       	"\"天猫\"",
@@ -73,8 +77,6 @@ export default {
     },
 
    mounted(){
-   
-   	
    	this.$http.get("http://api.yunger.com/news/search?accesstoken=80fbdfb42acf134fb128a67a16811192&class=我们&num=50&days=7").then((res) =>{
    			this.yungerdata=res.data.data
    			//console.log(res)
@@ -88,16 +90,38 @@ export default {
    	},50)	
    },
    methods:{
+   	slideclass(e){
+   		this.x.start=e.touches[0].pageX;
+   		//e.preventDefault()
+   	},
+   	slideclassMove(e){
+   		this.x.move=e.touches[0].pageX;
+   		
+   		this.x.w = Math.floor(this.x.move-this.x.start)+this.pre;
+   		//最大距离不能超过内容的宽度减去屏幕的宽度
+   		let maxW = this.x.totalWidth - document.documentElement.clientWidth;
+   		if (this.x.w>0) {
+   			this.x.w = 0;
+   		}
+   		else if(this.x.w<-maxW){
+   			//30是列表最右侧方块的宽
+   			this.x.w = -maxW+60;
+   		}
+   		console.log(this.pre);
+   		this.$refs.keywordclasstotal.style.left =this.x.w+'px';
+   		//e.preventDefault()
+   	},
+   	slideclassEnd(e){
+   		//e.preventDefault()
+   		//把上次的偏移量记录下来
+   		this.pre = this.x.w;
+   	},
    	chooseKeyWord(item,index){
    		this.ind = index;
    		let _item = item
    		this.$http.get("http://api.yunger.com/news/search?accesstoken=80fbdfb42acf134fb128a67a16811192&class="+item+"&num=50&days=7").then((res) =>{
    			this.yungerdata=res.data.data
-   			//console.log(res)
-   			//console.log(this.yungerdata)
-   		//console.log('hello',item)
    		})
-   		//console.log('hello',item
    	},
    	_getwidth(){
 
@@ -108,6 +132,7 @@ export default {
    		for(let i=0;i<length;i++){
    			let width = this.$refs.keywordclasstotal.children[i].offsetWidth;
    			totalWidth += width+10;
+   			this.x.totalWidth = totalWidth;
    			//console.log(totalWidth)
    		}
    		this.$refs.keywordclasstotal.style.width = totalWidth+'px';
@@ -154,19 +179,21 @@ export default {
 			z-index:10
 			border-bottom:1px solid #ccc
 			overflow:hidden
-			overflow-x:auto
+			//overflow-x:auto
 			//overflow-y:hidden
-			.class-item
-				display:block
-				float:left
-				padding-right:10px
-				line-height:40px
-				text-align:center
-				overflow:hidden	
-				&.active
-					color:blue
-					background:#ccc
-					border-bottom:1px solid #f0f
+			.keywordclassul
+				position:absolute
+				.class-item
+					display:block
+					float:left
+					padding-right:10px
+					line-height:40px
+					text-align:center
+					overflow:hidden	
+					&.active
+						color:blue
+						background:#ccc
+						border-bottom:1px solid #f0f
 			.keywordclass-menu
 				position:fixed
 				display:inline-block

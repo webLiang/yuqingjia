@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>测试点击事件和touch事件的冲突</title>
+	<style>
+		#ul1{
+			border: 1px solid yellow;
+			padding: 10px;
+			width: 500px;
+			background: #ccc;
+		}
+		#ul1 li{
+			width: 300px;
+			height: 30px;
+			background: red;
+			margin: 5px 0;
+			list-style-type: none;
+		}
+	</style>
+	<script>
+	window.onload=function(){
+		var oUl1 =document.getElementById('ul1');
+		var oLi = document.getElementById('li1');
+		oLi.onclick=function(e){
+			event.cancelBubble = true;
+			e.preventDefault();
+			console.log('hellooL1')
+		}
+		oUl1.ontouchstart = function(e){
+			//e.preventDefault();
+			console.log('ontouchstart')
+		};
+		oUl1.ontouchmove = function(e){
+			//e.preventDefault();
+			console.log('ontouchmove')
+		};
+		oUl1.ontouchend = function(e){
+			//e.preventDefault();
+			console.log('ontouchend')
+		}
+	}
+	</script>
+</head>
+<body>
+	<div id="div1">
+		<ul id="ul1">
+			<li id="li1">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>7</li>
+			<li>8</li>
+		</ul>
+	</div>
+</body>
+</html>
