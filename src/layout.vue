@@ -2,7 +2,7 @@
 	<div class="main">
     <div class="header">数据监测</div>
     
-   <router-view class="main" :class-word="classWord"></router-view>
+   <router-view v-if="classWord.length" class="main" :class-word="classWord"></router-view>
     <div class="link">
       	<div class="link-item">
           <router-link to="/data">
@@ -30,7 +30,7 @@ const API_PROXY = 'https://bird.ioliu.cn/v1/?url='
 export default {
 data(){
   return{
-    classWord:['我们','竞对']
+    classWord:[]
   }
   
 },

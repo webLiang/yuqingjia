@@ -1,38 +1,42 @@
 <template>
 <div>
 	<h2>你好我是分析组件</h2>
-	<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom">
-	  <ul>
-	    <li v-for="item in list">{{ item }}</li>
-	  </ul>
-	</mt-loadmore>
+	<pull @load="load">
+		<div v-for="i in players" class="list-item">
+          {{ i }}
+        </div>
+	</pull>
 </div>
 
 </template>
 
 <script>
+import pull from './pull'
 export default {
 	data(){
 		return{
-			list:['量1','量1','量1','量1','量1','量1','量1','量1','量1','量1','量1','量1','量1','量1','量1','量1',]
+			players: ['kobe', 'fisher', 'jordan', 'shark', 'duncun', 'fisher', 'jordan', 'shark', 'duncun', 'fisher', 'jordan', 'shark', 'duncun', 'fisher', 'jordan', 'shark', 'duncun', 'fisher', 'jordan', 'shark', 'duncun', 'fisher', 'jordan', 'shark', 'duncun', 'fisher', 'jordan', 'shark', 'duncun']
 		}
-		
-
 	},
 	methods:{
-		loadTop(id) {
-		  //...// 加载更多数据
-		  this.$broadcast('onTopLoaded', id);
-		},
-		loadBottom(id) {
-		  //...// 加载更多数据
-		  this.allLoaded = true;// 若数据已全部获取完毕
-		  this.$broadcast('onBottomLoaded', id)
-		}
+		load(resolve){
+        setTimeout(() => {
+          for (let i = 0; i < 4; i++) {
+            this.players.unshift('player No.' + Math.floor(Math.random() * 10) + 1);
+          }
+          console.log(resolve)
+          resolve();
+        }, 1000)
+      }
+	},
+	components:{
+		pull
 	}
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="stylus">
+	.list-item
+		margin-top:8px
 </style>

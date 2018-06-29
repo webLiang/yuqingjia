@@ -56,23 +56,22 @@ export default {
 		
 		classWord:{
 			type:Array,
-			default:[
-				
+			default:[	
 			]		
 		}
 	},
 	created(){
-			this.x={},
-			this.pre = 0;
+			
 	},
 	data() {
       return {
-      	
+      	x:{},
+		pre:0,
       	yungerdata:{},
       	keyword:
       	"\"天猫\"",
       	toggle:false,
-      	ind:''
+      	ind:0
       }
     },
 
@@ -92,11 +91,12 @@ export default {
    methods:{
    	slideclass(e){
    		this.x.start=e.touches[0].pageX;
+   		return false;
    		//e.preventDefault()
    	},
    	slideclassMove(e){
    		this.x.move=e.touches[0].pageX;
-   		
+   		//pre是存储上一次点击移动的差值
    		this.x.w = Math.floor(this.x.move-this.x.start)+this.pre;
    		//最大距离不能超过内容的宽度减去屏幕的宽度
    		let maxW = this.x.totalWidth - document.documentElement.clientWidth;
@@ -104,12 +104,15 @@ export default {
    			this.x.w = 0;
    		}
    		else if(this.x.w<-maxW){
-   			//30是列表最右侧方块的宽
-   			this.x.w = -maxW+60;
+   			//60是列表最右侧方块的宽
+   			this.x.w = -maxW+40;
    		}
-   		console.log(this.pre);
-   		this.$refs.keywordclasstotal.style.left =this.x.w+'px';
+   			this.$refs.keywordclasstotal.style.left =this.x.w+'px';
+   		
+   		//console.log(this.pre);
+   		
    		//e.preventDefault()
+   		return false;
    	},
    	slideclassEnd(e){
    		//e.preventDefault()
