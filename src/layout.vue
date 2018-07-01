@@ -36,7 +36,6 @@ data(){
 },
 mounted(){
   this.$http.get(this.HOST +"/user/getclass?accesstoken=80fbdfb42acf134fb128a67a16811192").then((res) =>{
-    
      this.classWord=res.data.data.info
     //console.log(res)
   })
