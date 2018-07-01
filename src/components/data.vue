@@ -13,22 +13,6 @@
 	</div>
 	</keep-alive>	
 	<div class="yungercontent">
-	<!-- <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded">
-		<ul v-show="yungerdata">
-	 		<li v-for="item in yungerdata.info"class="yungerdata-item">
-				<div class="item-main">
-					<div class="item-main-header">
-						<a  class="title" :href="item.url" v-html="item.title" :url="item.image"></a>
-						<span class="site">{{item.site}}</span>
-						<span class="time">{{item.time}}</span>
-					</div>
-					<div class="item-main-foot">
-						<span v-html="item.content" class="content"></span>
-					</div>	
-				</div>
-	 		</li>
-	 	</ul>
-	</mt-loadmore> -->
  	<ul v-show="yungerdata">
  		<li v-for="item in yungerdata.info"class="yungerdata-item">
 			<div class="item-main">
@@ -68,14 +52,14 @@ export default {
       	x:{},
 		pre:0,
       	yungerdata:{},
-      	keyword:
-      	"\"天猫\"",
+      	keyword:'',
       	toggle:false,
       	ind:0
       }
     },
 
    mounted(){
+   	this._getUrl(),
    	this.$http.get("http://api.yunger.com/news/search?accesstoken=80fbdfb42acf134fb128a67a16811192&class=我们&num=50&days=7").then((res) =>{
    			this.yungerdata=res.data.data
    			//console.log(res)
@@ -125,6 +109,28 @@ export default {
    		this.$http.get("http://api.yunger.com/news/search?accesstoken=80fbdfb42acf134fb128a67a16811192&class="+item+"&num=50&days=7").then((res) =>{
    			this.yungerdata=res.data.data
    		})
+   	},
+   	_getUrl(){
+   		let url='http://api.yunger.com/news/search';
+   		if(url.indexOf('?')==-1){
+   			url = url + '?';
+   		}else{
+   			url = url;
+   		}
+   		let obj = {
+   			class:'我们',
+   			num:10,
+   			days:7
+   		}
+   		let arr =[];
+   		for(let item in obj){
+   			let str = item +'='+obj[item];
+   			arr.push(str);
+   		}
+   		let newStr =url + arr.join('&');
+   		newStr = encodeURI(newStr)
+   		console.log(newStr);
+   		return newStr;
    	},
    	_getwidth(){
 
